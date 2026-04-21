@@ -1,0 +1,19 @@
+project:
+  name: RiskLens
+  environment: dev
+
+database:
+  host: localhost
+  port: 5432
+  name: risklens
+  user: postgres
+  schema: core
+
+pipelines:
+  holdings_frequency: daily
+  market_data_frequency: daily
+  reporting_frequency: daily
+
+reporting:
+  base_currency: USD
+  default_var_confidence: 0.95
