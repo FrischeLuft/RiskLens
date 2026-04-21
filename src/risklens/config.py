@@ -18,7 +18,7 @@ class Settings:
     data_dir: str
 
     @classmethod
-    def from_env(cls) -> "Settings":
+    def from_env(cls) -> Settings:
         return cls(
             environment=os.getenv("RISKLENS_ENV", "dev"),
             db_host=os.getenv("RISKLENS_DB_HOST", "localhost"),
