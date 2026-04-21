@@ -1,82 +1,107 @@
 # RiskLens
 
-Portfolio Risk and Exposure Analytics Platform for hedge-fund-style, legal-entity, and managed-account structures.
+Portfolio risk and exposure analytics platform for multi-entity, hedge-fund-style portfolios.
 
 ## Overview
 
-RiskLens is an end-to-end portfolio risk analytics platform designed to show how Risk IT can support investment and risk teams through:
+RiskLens is an end-to-end portfolio risk analytics platform built to show how Risk IT can support investment and risk teams through data pipelines, portfolio hierarchy modeling, core risk calculations, monitoring logic, and dashboard-ready reporting outputs.
 
-- holdings ingestion and normalization;
-- hierarchical portfolio aggregation;
-- exposure analytics;
-- core risk metric calculation;
-- concentration and limit monitoring;
-- scenario analysis and stress testing;
-- dashboard-based reporting.
+The platform is designed to ingest holdings, market data, and portfolio structure information, aggregate exposures across multiple reporting levels, and calculate key risk indicators such as concentration, volatility, drawdown, and Value at Risk.
 
-The platform is not intended to make investment decisions. Its purpose is to provide a structured analytical layer for portfolio oversight, transparency, and risk monitoring.
+RiskLens is not intended to make investment decisions. Its purpose is to provide analytical infrastructure for portfolio oversight, transparency, stress analysis, and structured risk reporting.
 
-## Why This Project
+## Why RiskLens
 
-RiskLens is designed as:
-
-- a strong portfolio project for interviews in Risk IT, hedge funds, portfolio analytics, and investment risk;
-- a modular sandbox for building realistic risk pipelines;
-- a potential foundation for a future niche B2B product in portfolio risk monitoring and reporting.
+- Interview-grade portfolio project for Risk IT, hedge funds, portfolio analytics, and investment risk roles
+- Modular analytics platform that mirrors realistic risk and data workflows
+- Strong base for a future niche B2B product in portfolio risk monitoring and reporting
 
 ## Core Capabilities
 
-- Ingest portfolio holdings, market data, and portfolio structure data.
-- Normalize security, account, fund, and entity-level records into a consistent data model.
-- Aggregate positions across fund, legal entity, account, and position levels.
-- Analyze exposures by asset class, sector, region, currency, issuer, and strategy.
-- Calculate portfolio analytics such as volatility, drawdown, and Value at Risk.
-- Monitor concentration, issuer limits, country limits, and custom threshold rules.
-- Run historical and hypothetical stress scenarios.
-- Publish dashboard-ready datasets and automated reporting outputs.
-
-## Target Users
-
-- Risk teams
-- Portfolio managers
-- Investment operations teams
-- Risk IT and data teams
-- Business stakeholders who need portfolio-level transparency
+- Holdings ingestion and normalization
+- Market data enrichment
+- Portfolio aggregation across fund, legal entity, account, and position levels
+- Exposure analytics by asset class, sector, region, currency, and issuer
+- Core risk metrics including volatility, max drawdown, and historical VaR
+- Concentration and threshold monitoring
+- Scenario analysis and stress testing
+- Dashboard-ready marts and automated reporting outputs
 
 ## Architecture
 
-RiskLens is split into five logical layers:
+```mermaid
+flowchart LR
+    A["Source Data<br/>Holdings, Market Data, Reference Data"] --> B["Ingestion Layer<br/>Validation and Normalization"]
+    B --> C["Structured Data Model<br/>PostgreSQL"]
+    C --> D["Exposure Engine<br/>Aggregations and Look-through Views"]
+    C --> E["Risk Engine<br/>Volatility, Drawdown, VaR"]
+    C --> F["Scenario Engine<br/>Stress and Shock Logic"]
+    D --> G["Reporting Layer<br/>Marts, Dashboards, Monitoring Outputs"]
+    E --> G
+    F --> G
+```
+
+### Logical Layers
 
 1. Ingestion layer  
-   Loads holdings, market data, and reference data from source systems.
+   Loads and standardizes holdings, market data, and portfolio structure inputs.
 
 2. Data model layer  
-   Organizes normalized portfolio, instrument, hierarchy, and pricing datasets in PostgreSQL.
+   Stores normalized portfolio, instrument, hierarchy, and pricing data in PostgreSQL.
 
-3. Risk engine  
-   Computes exposures, concentration metrics, volatility, drawdown, and Value at Risk.
+3. Exposure engine  
+   Aggregates positions and exposures across reporting hierarchies and business dimensions.
 
-4. Scenario engine  
-   Applies shocks and stress scenarios to simulate portfolio vulnerability.
+4. Risk engine  
+   Calculates core portfolio risk metrics and monitoring indicators.
 
-5. Reporting layer  
-   Feeds BI dashboards, scheduled reporting jobs, and alerting workflows.
+5. Scenario engine  
+   Applies historical or hypothetical market shocks.
+
+6. Reporting layer  
+   Publishes dashboard-ready marts, breach views, and summary outputs.
 
 More detail lives in [docs/architecture.md](/Users/igor.pokhotelov/Desktop/RiskLens/docs/architecture.md).
+
+## Roadmap
+
+```mermaid
+flowchart LR
+    A["Phase 1<br/>Foundation and Data Model"] --> B["Phase 2<br/>Ingestion and Hierarchy"]
+    B --> C["Phase 3<br/>Exposure Analytics"]
+    C --> D["Phase 4<br/>Risk Metrics and Monitoring"]
+    D --> E["Phase 5<br/>Scenarios and Reporting"]
+    E --> F["Phase 6<br/>Polish and Presentation"]
+```
+
+| Phase | Focus | Main Outputs |
+|---|---|---|
+| 1. Foundation and Data Model | Project structure, schema design, environment setup | Canonical entities, schema DDL, development workflow |
+| 2. Ingestion and Hierarchy | Holdings and market data loading, validation, hierarchy mapping | Source loaders, normalized staging data, portfolio links |
+| 3. Exposure Analytics | Aggregation across reporting levels and dimensions | Exposure views and marts by asset class, sector, region, currency |
+| 4. Risk Metrics and Monitoring | Core metrics and breach logic | Volatility, drawdown, historical VaR, concentration checks |
+| 5. Scenarios and Reporting | Stress testing and business-facing outputs | Scenario templates, stressed summaries, reporting marts |
+| 6. Polish and Presentation | Testing, documentation, demo readiness | Cleaner tests, stronger documentation, interview-ready narrative |
+
+### Immediate Build Priority
+
+`holdings ingestion + canonical PostgreSQL data model`
+
+The working roadmap is in [docs/roadmap.md](/Users/igor.pokhotelov/Desktop/RiskLens/docs/roadmap.md).
 
 ## Repository Structure
 
 ```text
 RiskLens/
-|- config/                  # YAML and environment-driven runtime configuration
+|- config/                  # Runtime configuration
 |- data/
 |  |- raw/                  # Landing zone for source extracts
 |  |- staging/              # Cleaned intermediate datasets
 |  `- curated/              # Analytics-ready outputs
-|- docs/                    # Architecture, roadmap, and design notes
-|- notebooks/               # Exploratory analysis and prototyping
+|- docs/                    # Architecture and planning documents
+|- notebooks/               # Exploratory analysis
 |- sql/
-|  |- schema/               # Core PostgreSQL DDL
+|  |- schema/               # PostgreSQL DDL
 |  |- views/                # Reusable analytics views
 |  `- marts/                # Dashboard-facing marts
 |- src/risklens/
@@ -97,27 +122,27 @@ RiskLens/
 - PostgreSQL
 - Pandas / NumPy / SciPy
 - SQLAlchemy
-- BI or dashboard tooling such as Power BI, Metabase, or Tableau
+- BI tooling such as Power BI, Metabase, or Tableau
 
 ## MVP Scope
 
-The first practical MVP can focus on:
+The first practical MVP should focus on:
 
 - ingesting daily holdings snapshots;
 - loading security master and market price history;
-- mapping portfolio hierarchy from fund to account;
-- calculating long/short and net exposures;
-- measuring top issuer, sector, region, and currency concentrations;
-- producing volatility, max drawdown, and historical VaR;
-- generating a dashboard-ready daily risk summary table.
+- mapping hierarchy from fund to legal entity to account;
+- calculating gross, net, and grouped exposures;
+- measuring issuer, sector, region, and currency concentrations;
+- calculating volatility, max drawdown, and historical VaR;
+- publishing a daily risk summary mart for reporting.
 
 ## Example Analytics Questions
 
 - What is the total exposure by asset class across all legal entities?
 - Which issuers exceed internal concentration limits?
-- How much of portfolio risk comes from one sector or region?
-- How would the portfolio behave under a rates shock, equity selloff, or FX devaluation?
-- How has portfolio drawdown evolved over the last 12 months?
+- How concentrated is portfolio risk by sector, region, or currency?
+- How would the portfolio behave under an equity selloff, rates shock, or FX devaluation?
+- How has drawdown evolved over the last 12 months?
 
 ## Getting Started
 
@@ -144,21 +169,13 @@ Copy `.env.example` into `.env` and update the database settings.
 python3 -m unittest discover -s tests -v
 ```
 
-## Roadmap
-
-- Phase 1: project scaffolding and canonical data model
-- Phase 2: ingestion pipelines and portfolio hierarchy mapping
-- Phase 3: exposure analytics and dashboard marts
-- Phase 4: risk engine metrics and concentration monitoring
-- Phase 5: scenario engine and automated reporting
-
-The working project roadmap is in [docs/roadmap.md](/Users/igor.pokhotelov/Desktop/RiskLens/docs/roadmap.md).
-
 ## Non-Goals
 
-- No trade execution
-- No investment recommendation logic
-- No order management or portfolio rebalancing workflows
+- Trade execution
+- Investment recommendation logic
+- OMS workflows
+- Full production front-end product
+- Enterprise auth and permissioning in the current MVP
 
 ## Disclaimer
 
